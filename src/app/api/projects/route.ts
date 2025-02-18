@@ -12,6 +12,7 @@ interface ProjectRequest {
     content: string,
     liveUrl: string,
     repoUrl: string
+    status:'Active'| 'Archived'
 
 }
 

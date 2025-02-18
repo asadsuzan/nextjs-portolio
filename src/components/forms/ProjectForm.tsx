@@ -2,7 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Plus, Save, X } from "lucide-react";
+import {  Clock, Plus, Save, X } from "lucide-react";
+import Link from "next/link";
 
 export type ProjectFormData = {
   title: string;
@@ -12,6 +13,7 @@ export type ProjectFormData = {
   content: string;
   repoUrl: string;
   liveUrl: string;
+  status:'Active'|'Archived'
 };
 
 const defaultProject: ProjectFormData = {
@@ -22,10 +24,11 @@ const defaultProject: ProjectFormData = {
   content: "",
   repoUrl: "",
   liveUrl: "",
+  status:'Active'
 };
 
-export default function ProjectForm({ initialData = defaultProject, onSubmit, onCancel=null }) {
-  const { register, handleSubmit, setValue, watch, reset } = useForm({
+export default function ProjectForm({ initialData = defaultProject, onSubmit, onCancel=null,isLoading=false }) {
+  const { register, handleSubmit, setValue, watch, reset, } = useForm({
     defaultValues: initialData
   });
 
@@ -47,12 +50,21 @@ export default function ProjectForm({ initialData = defaultProject, onSubmit, on
   };
 
   const submitHandler = (data) => {
+
     onSubmit(data);
-    // reset();
+    reset();
   };
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-8">
+              <Link
+                href="/dashboard/projects"
+                className="text-blue-600 hover:text-blue-700 flex items-center"
+              >
+                ← Back to Projects
+              </Link>
+            </div>
       <h2 className="text-xl font-bold mb-4">{initialData ? "Edit Project" : "Add New Project"}</h2>
 
       <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
@@ -116,6 +128,14 @@ export default function ProjectForm({ initialData = defaultProject, onSubmit, on
           <label className="block text-gray-700 font-medium mb-1">Live URL</label>
           <input {...register("liveUrl")} type="url" className="w-full border p-2 rounded-lg" placeholder="Live project link" />
         </div>
+        {/* status */}
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">Status</label>
+        <select {...register("status", { required: true })} className="border p-2 rounded-lg">
+          <option value="Active">Active</option>
+          <option value="Archived">Archived</option>
+        </select>
+        </div>
 
         {/* Buttons */}
         <div className="flex justify-end gap-3">
@@ -125,7 +145,18 @@ export default function ProjectForm({ initialData = defaultProject, onSubmit, on
             </button>
           )}
           <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-            <Save className="h-5 w-5" /> {initialData ? "Update Project" : "Save Project"}
+            {
+              isLoading? (
+               <div className="flex gap-2 items-center">
+                  <Clock className="h-5 w-5" /> Please wait...
+               </div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <Save className="h-5 w-5" /> {initialData ? "Update Project" : "Save Project"}
+                </div>
+              )
+            }
+           
           </button>
         </div>
       </form>

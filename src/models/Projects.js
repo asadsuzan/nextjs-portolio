@@ -8,6 +8,11 @@ const ProjectSchema = new mongoose.Schema({
   content: { type: String, required: true },
   repoUrl: { type: String },
   liveUrl: { type: String },
+  status:{
+    type: String,
+    enum: ["Archived", "Active"],
+    default: "Active"
+  }
 }, { timestamps: true });
 
 export default mongoose.models.Project || mongoose.model("Project", ProjectSchema);
