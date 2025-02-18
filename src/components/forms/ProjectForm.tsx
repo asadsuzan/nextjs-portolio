@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import {  Clock, Plus, Save, X } from "lucide-react";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const defaultProject: ProjectFormData = {
   status:'Active'
 };
 
-export default function ProjectForm({ initialData = defaultProject, onSubmit, onCancel=null,isLoading=false }) {
+export default function ProjectForm({ initialData = defaultProject, onSubmit, onCancel, isLoading = false }: { initialData?: ProjectFormData, onSubmit: (data: FieldValues) => void, onCancel?: () => void, isLoading?: boolean }) {
   const { register, handleSubmit, setValue, watch, reset, } = useForm({
     defaultValues: initialData
   });
@@ -42,14 +42,14 @@ console.log(initialData)
     }
   };
 
-  const handleRemoveTech = (tech) => {
+  const handleRemoveTech = (tech:string) => {
     setValue(
       "tech",
       watch("tech").filter((t) => t !== tech)
     );
   };
 
-  const submitHandler = (data) => {
+  const submitHandler = (data:FieldValues) => {
 
     onSubmit(data);
     reset();

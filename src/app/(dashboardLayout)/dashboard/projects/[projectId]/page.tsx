@@ -7,7 +7,7 @@ const EditProjectPage = ({ params }: { params: Promise<{ projectId: string }> })
   const [isLoading, setIsLoading] = useState(false);
   const [project, setProject] = useState<ProjectFormData | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
-
+  
   useEffect(() => {
     const resolveParams = async () => {
       const resolvedParams = await params;
