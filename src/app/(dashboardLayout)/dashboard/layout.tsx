@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
