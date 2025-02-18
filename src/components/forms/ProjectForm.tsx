@@ -31,7 +31,7 @@ export default function ProjectForm({ initialData = defaultProject, onSubmit, on
   const { register, handleSubmit, setValue, watch, reset, } = useForm({
     defaultValues: initialData
   });
-
+console.log(initialData)
   const [techInput, setTechInput] = useState("");
 
   const handleAddTech = () => {
