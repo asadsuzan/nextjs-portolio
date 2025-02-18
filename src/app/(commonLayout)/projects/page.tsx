@@ -11,6 +11,7 @@ const ProjectsPage = () => {
       description: "Full-stack e-commerce solution",
       tech: ["React", "Node.js", "MongoDB"],
       year: 2024,
+      
     },
     {
       id: 2,
@@ -18,6 +19,7 @@ const ProjectsPage = () => {
       description: "Real-time chat with AI integration",
       tech: ["Python", "TensorFlow", "WebSocket"],
       year: 2023,
+      
     },
   ];
 

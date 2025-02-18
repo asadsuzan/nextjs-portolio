@@ -1,6 +1,9 @@
+'use client'
 import { Edit, Trash, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ProjectManagement() {
+  const router = useRouter()
   // Temporary project data
   const projects = [
     {
@@ -25,7 +28,7 @@ export default function ProjectManagement() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Project Management</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center" onClick={()=>router.push('projects/create')}>
           <Plus className="h-5 w-5 mr-2" />
           New Project
         </button>
@@ -85,7 +88,7 @@ export default function ProjectManagement() {
                 <td className="px-6 py-4">{project.date}</td>
                 <td className="px-6 py-4">{project.views}</td>
                 <td className="px-6 py-4 flex gap-2">
-                  <button className="text-blue-600 hover:text-blue-700">
+                  <button className="text-blue-600 hover:text-blue-700" onClick={()=>router.push(`projects/${12432154254}`)}>
                     <Edit className="h-5 w-5" />
                   </button>
                   <button className="text-red-600 hover:text-red-700">
