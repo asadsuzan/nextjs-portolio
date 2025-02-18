@@ -48,7 +48,7 @@ export default function ProjectForm({ initialData = defaultProject, onSubmit, on
 
   const submitHandler = (data) => {
     onSubmit(data);
-    reset();
+    // reset();
   };
 
   return (
