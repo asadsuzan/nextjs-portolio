@@ -5,18 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 import Message from "@/models/Message";
 
 
-
 interface RequestParams {
-    params: {
-        id: string;
-    };
-}
+    params: Promise<{ id: string }>;
+  }
+
 
 
 
 export async function DELETE(req: NextRequest, { params }: RequestParams) {
   await connectDB();
-  const deletedMessage = await Message.findByIdAndDelete(params.id);
+    const  resolvedParams = await params
+  const deletedMessage = await Message.findByIdAndDelete(resolvedParams.id);
   if (!deletedMessage) return NextResponse.json({ error: "message not found" }, { status: 404 });
   return NextResponse.json({ message: "message deleted" }, { status: 200 });
 }
@@ -25,6 +24,7 @@ export async function DELETE(req: NextRequest, { params }: RequestParams) {
 
 export async function PUT(req: NextRequest, { params }: RequestParams) {
     await connectDB();
+    const  resolvedParams = await params;
     try {
       const data = await req.json();
       
@@ -35,7 +35,7 @@ export async function PUT(req: NextRequest, { params }: RequestParams) {
       }
   
       const updatedMessage = await Message.findByIdAndUpdate(
-        params.id,
+        resolvedParams.id,
         { status },
         { new: true }
       );

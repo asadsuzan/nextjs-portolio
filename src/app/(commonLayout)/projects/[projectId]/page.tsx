@@ -2,8 +2,12 @@ import { notFound } from "next/navigation";
 import { Briefcase, Github, Globe,  } from "lucide-react";
 import Link from "next/link";
 
+interface ProjectProps {
+  params: Promise<{ projectId: string }>;
+}
 
-const ProjectDetails = ({ params }: { params: { projectId: string } }) => {
+const ProjectDetails = async({ params }: ProjectProps) => {
+  const resolvedParams = await params; 
   // Temporary data - replace with real data fetching
   const project = {
     id: 1,
@@ -16,7 +20,7 @@ const ProjectDetails = ({ params }: { params: { projectId: string } }) => {
     liveUrl: "#",
   };
 
-  if (parseInt(params.projectId) !== 1) return notFound();
+  if (parseInt(resolvedParams.projectId) !== 1) return notFound();
 
   return (
     <div className="min-h-screen flex flex-col">
