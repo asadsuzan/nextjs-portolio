@@ -1,7 +1,7 @@
 "use client";
 
 import { FieldValues, useForm } from "react-hook-form";
-import { useState } from "react";
+import {  useState } from "react";
 import {  Clock, Plus, Save, X } from "lucide-react";
 import Link from "next/link";
 
@@ -25,13 +25,13 @@ const defaultProject: ProjectFormData = {
   repoUrl: "",
   liveUrl: "",
   status:'Active'
-};
+}  
 
 export default function ProjectForm({ initialData = defaultProject, onSubmit, onCancel, isLoading = false }: { initialData?: ProjectFormData, onSubmit: (data: FieldValues) => void, onCancel?: () => void, isLoading?: boolean }) {
   const { register, handleSubmit, setValue, watch, reset, } = useForm({
     defaultValues: initialData
   });
-console.log(initialData)
+
   const [techInput, setTechInput] = useState("");
 
   const handleAddTech = () => {
@@ -96,7 +96,7 @@ console.log(initialData)
             </button>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
-            {watch("tech").map((tech) => (
+            {watch("tech")?.map((tech) => (
               <span key={tech} className="bg-gray-200 px-2 py-1 rounded-lg flex items-center gap-1">
                 {tech}
                 <X className="h-4 w-4 cursor-pointer text-red-500" onClick={() => handleRemoveTech(tech)} />

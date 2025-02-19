@@ -1,6 +1,8 @@
 'use client'
 import { ProjectFormData } from "@/components/forms/ProjectForm";
-import { Edit, Trash, Plus } from "lucide-react";
+import EmptyState from "@/components/shared/EmptyState";
+import Spinner from "@/components/shared/Spinner";
+import { Edit, Trash, Plus, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -10,9 +12,8 @@ type TProjectResponse = {
 export default  function ProjectManagement() {
   const  [isLoading,setIsLoading] = useState(false)
   const router = useRouter()
-
   const [projects,setProjects] = useState<TProjectResponse[]>([])
-
+  const [deletingId, setDeletingId] = useState<string | null>(null);
  useEffect(()=>{
   const fetchProjects = async () => {
     setIsLoading(true)
@@ -30,8 +31,32 @@ export default  function ProjectManagement() {
 
  },[])
 
+ const handleDelete = async (projectId: string) => {
+  if (!window.confirm("Are you sure you want to delete this project?")) return;
+
+  setDeletingId(projectId);
+
+  try {
+    const response = await fetch(`/api/projects/${projectId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete project");
+    }
+
+    // Remove deleted project from state
+    setProjects((prev) => prev.filter((project) => project._id !== projectId));
+  } catch (error) {
+    console.error("Error deleting project:", error);
+  } finally {
+    setDeletingId(null);
+  }
+};
+
+
  if(isLoading){
-   return <p>Loading...</p>
+   return <Spinner/>
  }
 
 
@@ -102,14 +127,28 @@ export default  function ProjectManagement() {
                   <button className="text-blue-600 hover:text-blue-700" onClick={()=>router.push(`projects/${project._id}`)}>
                     <Edit className="h-5 w-5" />
                   </button>
-                  <button className="text-red-600 hover:text-red-700">
-                    <Trash className="h-5 w-5" />
+               
+                    <button
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => handleDelete(project._id)}
+                    disabled={deletingId === project._id}
+                  >
+                    {deletingId === project._id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Trash className="h-5 w-5" />
+                    )}
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      {
+        projects.length === 0 && !isLoading && (
+       <EmptyState />
+        )
+      }
       </div>
     </div>
   );
