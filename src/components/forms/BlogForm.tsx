@@ -3,33 +3,41 @@
 import { useForm } from "react-hook-form";
 import { Plus, Save, X } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 type BlogFormProps = {
   initialData?: BlogData | null;
   onSubmit: (data: BlogData) => void;
   onCancel?: () => void;
+  isLoading?: boolean;
 };
 
 export type BlogData = {
   title: string;
   date: string;
   excerpt: string;
+  content: string;
   tags: string[];
-  status: "Active" | "Draft";
-  views: number;
+  status: "Active" | "Draft" | "Archived";
+  
 };
 
-export default function BlogForm({ initialData, onSubmit, onCancel }: BlogFormProps) {
-  const { register, handleSubmit, setValue, watch, reset } = useForm<BlogData>({
-    defaultValues: initialData || {
-      title: "",
-      date: new Date().toISOString().split("T")[0], // Default to today's date
-      excerpt: "",
-      tags: [],
-      status: "Draft",
-      views: 0,
-    },
-  });
+export default function BlogForm({ initialData, onSubmit, onCancel, isLoading }: BlogFormProps) {
+  const defaultValues = initialData
+    ? {
+        ...initialData,
+        date: initialData.date ? new Date(initialData.date).toISOString().split("T")[0] : "", // Convert date for editing
+      }
+    : {
+        title: "",
+        date: new Date().toISOString().split("T")[0], // Default to today's date for new blogs
+        excerpt: "",
+        tags: [],
+        status: "Draft" as "Draft" | "Active" | "Archived",
+        content: "",
+      };
+
+  const { register, handleSubmit, watch, setValue, reset } = useForm<BlogData>({ defaultValues });
 
   const [tagInput, setTagInput] = useState("");
 
@@ -55,6 +63,14 @@ export default function BlogForm({ initialData, onSubmit, onCancel }: BlogFormPr
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+          <div className="mb-8">
+              <Link
+                href="/dashboard/blogs"
+                className="text-blue-600 hover:text-blue-700 flex items-center"
+              >
+                ← Back to Blogs
+              </Link>
+            </div>
       <h2 className="text-xl font-bold mb-4">{initialData ? "Edit Blog" : "Add New Blog"}</h2>
 
       <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
@@ -85,8 +101,19 @@ export default function BlogForm({ initialData, onSubmit, onCancel }: BlogFormPr
           <textarea
             {...register("excerpt", { required: true })}
             className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
+            rows={2}
             placeholder="Short description of the blog"
+          />
+        </div>
+
+        {/* content */}
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">Content</label>
+          <textarea
+            {...register("content", { required: true })}
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={4}
+            placeholder="Content of the blog"
           />
         </div>
 
@@ -129,19 +156,11 @@ export default function BlogForm({ initialData, onSubmit, onCancel }: BlogFormPr
           >
             <option value="Active">Active</option>
             <option value="Draft">Draft</option>
+            <option value="Archived">Archived</option>
+
           </select>
         </div>
-
-        {/* Views */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">Views</label>
-          <input
-            {...register("views")}
-            type="number"
-            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            min="0"
-          />
-        </div>
+  
 
         {/* Buttons */}
         <div className="flex justify-end gap-3">
@@ -156,8 +175,13 @@ export default function BlogForm({ initialData, onSubmit, onCancel }: BlogFormPr
             </button>
           )}
           <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+           {
+            isLoading ? <>
+            Please wait 
+            </> : <>
             <Save className="h-5 w-5 mr-1" />
-            {initialData ? "Update Blog" : "Save Blog"}
+            {initialData ? "Update Blog" : "Save Blog"}</>
+           }
           </button>
         </div>
       </form>

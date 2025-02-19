@@ -1,31 +1,64 @@
 'use client'
-import { Edit, Trash, Plus } from "lucide-react";
+import { BlogData } from "@/components/forms/BlogForm";
+import EmptyState from "@/components/shared/EmptyState";
+import Spinner from "@/components/shared/Spinner";
+import { Edit, Trash, Plus, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
+type BlogResponse = {
+  _id: string;
+} & BlogData;
 export default function BlogManagement() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [blogs, setBlogs] = useState<BlogResponse []>([]);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const router =  useRouter()
-  // Temporary post data
-  const posts = [
-    {
-      id: 1,
-      title: "Optimizing React Performance",
-      date: "2024-03-15",
-      excerpt: "Best practices for optimizing React applications...",
-      tags: ["React", "Performance"],
-      status: "Active",
-      views: 1200,
-    },
-    {
-      id: 2,
-      title: "TypeScript Patterns",
-      date: "2024-03-10",
-      excerpt: "Advanced TypeScript development patterns...",
-      tags: ["TypeScript", "Best Practices"],
-      status: "Draft",
-      views: 800,
-    },
-  ];
 
+   useEffect(()=>{
+    const fetchBlogs = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetch('/api/blogs')
+        const data = await response.json()
+      
+      setBlogs(data?.blogs)
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchBlogs()
+  
+   },[])
+
+   const handleDelete = async (blogId: string) => {
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
+  
+    setDeletingId(blogId);
+  
+    try {
+      const response = await fetch(`/api/blogs/${blogId}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete blog");
+      }
+  
+      // Remove deleted project from state
+      setBlogs((prev) => prev.filter((blog) => blog._id !== blogId));
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  if(isLoading){
+    return <Spinner/>
+  }
 
   return (
     <div>
@@ -42,31 +75,33 @@ export default function BlogManagement() {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Title</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Excerpt</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Tags</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Date</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Views</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Content</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td className="px-6 py-4 font-medium">{post.title}</td>
+            {blogs?.map((blog) => (
+              <tr key={blog._id}>
+                <td className="px-6 py-4 font-medium">{blog.title}</td>
+                <td className="px-6 py-4 font-medium">{blog.excerpt}</td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-2 py-1 text-sm rounded-full ${
-                      post.status === "Active"
+                      blog.status === "Active"
                         ? "bg-green-100 text-green-800"
                         : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {post.status}
+                    {blog.status}
                   </span>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
+                    {blog.tags.map((tag) => (
                       <span
                         key={tag}
                         className="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full"
@@ -76,20 +111,31 @@ export default function BlogManagement() {
                     ))}
                   </div>
                 </td>
-                <td className="px-6 py-4">{post.date}</td>
-                <td className="px-6 py-4">{post.views}</td>
+                <td className="px-6 py-4">{new Date(blog?.date).toDateString()}</td>
+                <td className="px-6 py-4">{blog.content}</td>
+  
                 <td className="px-6 py-4 flex gap-3">
-                  <button className="text-blue-600 hover:text-blue-700" onClick={()=>router.push(`blogs/${131431}`)}>
+                  <button className="text-blue-600 hover:text-blue-700" onClick={()=>router.push(`blogs/${blog._id}`)}>
                     <Edit className="h-5 w-5" />
                   </button>
-                  <button className="text-red-600 hover:text-red-700">
-                    <Trash className="h-5 w-5" />
+                  <button className="text-red-600 hover:text-red-700" onClick={() => handleDelete(blog._id)}>
+                  {deletingId === blog._id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Trash className="h-5 w-5" />
+                    )}
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
+      
         </table>
+        {
+        blogs.length === 0 && !isLoading && (
+       <EmptyState />
+        )
+      }
       </div>
     </div>
   );
