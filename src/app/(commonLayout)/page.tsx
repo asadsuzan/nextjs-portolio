@@ -1,39 +1,69 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Briefcase, Code2, Globe, Mail, Rocket, Star } from "lucide-react";
+interface Project {
+  _id: string;
+  title: string;
+  description: string;
+  tech: string[];
+  year: number;
+  content: string;
+  repoUrl: string;
+  liveUrl: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}
 
+interface Blog {
+  _id: string;
+  title: string;
+  excerpt: string;
+  date: Date;
+  content: string;
+  tags: string[]; // Assuming tags are strings
+  tech: string[];
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}
+const HomePage =async () => {
 
-const HomePage = () => {
-  // Temporary data - replace with real data from your API/CMS
-  const featuredProjects = [
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      description: "Full-stack e-commerce solution with Next.js and Node.js",
-      tech: ["React", "TypeScript", "Node.js", "MongoDB"],
-    },
-    {
-      id: 2,
-      title: "AI Chat Application",
-      description: "Real-time chat application with AI integration",
-      tech: ["Python", "TensorFlow", "WebSocket", "Redis"],
-    },
-  ];
+  // Fetch featured projects from API
+  const fetchFeaturedProjects = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/projects`, {
+        cache: 'no-store'
+      });
+      return await res.json();
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+      return [];
+    }
+  };
 
-  const recentPosts = [
-    {
-      id: 1,
-      title: "Optimizing React Performance",
-      date: "2024-03-15",
-      excerpt: "Best practices for optimizing React applications...",
-    },
-    {
-      id: 2,
-      title: "TypeScript Advanced Patterns",
-      date: "2024-03-10",
-      excerpt: "Exploring advanced TypeScript development patterns...",
-    },
-  ];
+  // Fetch recent blog posts from API
+  const fetchRecentPosts = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/blogs`, {
+        cache: 'no-store'
+      });
+      return await res.json();
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+      return [];
+    }
+  };
+ // Fetch data in parallel
+ const [featuredProjectsRes, recentPostsRes] = await Promise.all([
+  fetchFeaturedProjects(),
+  fetchRecentPosts()
+]);
+const featuredProjects:Project[] = featuredProjectsRes?.project?.slice(0,2) || []
+const recentPosts:Blog[]= recentPostsRes?.blogs?.slice(0,2) || []
+
 
   return (
     <div>
@@ -107,7 +137,7 @@ const HomePage = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {featuredProjects.map((project) => (
-                <div key={project.id} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={project._id} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p className="text-gray-600 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -121,7 +151,7 @@ const HomePage = () => {
                     ))}
                   </div>
                   <Link
-                    href={`/projects/${project.id}`}
+                    href={`/projects/${project._id}`}
                     className="text-blue-600 hover:text-blue-700 flex items-center"
                   >
                     View Details
@@ -147,7 +177,7 @@ const HomePage = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {recentPosts.map((post) => (
-                <div key={post.id} className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                <div key={post._id} className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-semibold">{post.title}</h3>
                     <time className="text-sm text-gray-500">
@@ -155,8 +185,18 @@ const HomePage = () => {
                     </time>
                   </div>
                   <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.map((tag) => (
+                      <span 
+                        key={tag}
+                        className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <Link
-                    href={`/blog/${post.id}`}
+                    href={`/blog/${post._id}`}
                     className="text-blue-600 hover:text-blue-700 flex items-center"
                   >
                     Read More

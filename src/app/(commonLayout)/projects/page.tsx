@@ -1,28 +1,39 @@
 import Link from "next/link";
 import { Briefcase, Search, Star } from "lucide-react";
+interface Project {
+  _id: string;
+  title: string;
+  description: string;
+  tech: string[];
+  year: number;
+  content: string;
+  repoUrl: string;
+  liveUrl: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}
 
 
-const ProjectsPage = () => {
-  // Temporary data - replace with real data
-  const projects = [
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      description: "Full-stack e-commerce solution",
-      tech: ["React", "Node.js", "MongoDB"],
-      year: 2024,
-      
-    },
-    {
-      id: 2,
-      title: "AI Chat App",
-      description: "Real-time chat with AI integration",
-      tech: ["Python", "TensorFlow", "WebSocket"],
-      year: 2023,
-      
-    },
-  ];
+const ProjectsPage = async() => {
 
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/projects`, {
+        cache: 'no-store'
+      });
+      return await res.json();
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+      return [];
+    }
+  };
+  const data = await fetchProjects();
+  const projects = data?.project as Project[];
+
+
+ 
   return (
     <div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +54,7 @@ const ProjectsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
               <div
-                key={project.id}
+                key={project._id}
                 className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -63,7 +74,7 @@ const ProjectsPage = () => {
                   ))}
                 </div>
                 <Link
-                  href={`/projects/${project.id}`}
+                  href={`/projects/${project._id}`}
                   className="text-blue-600 hover:text-blue-700 flex items-center"
                 >
                   View Details

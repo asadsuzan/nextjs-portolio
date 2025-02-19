@@ -1,27 +1,49 @@
-import { notFound } from "next/navigation";
+
 import { Briefcase, Github, Globe,  } from "lucide-react";
 import Link from "next/link";
-
+import { notFound } from "next/navigation";
+interface Project {
+  _id: string;
+  title: string;
+  description: string;
+  tech: string[];
+  year: number;
+  content: string;
+  repoUrl: string;
+  liveUrl: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}
 interface ProjectProps {
   params: Promise<{ projectId: string }>;
 }
 
 const ProjectDetails = async({ params }: ProjectProps) => {
   const resolvedParams = await params; 
-  // Temporary data - replace with real data fetching
-  const project = {
-    id: 1,
-    title: "E-commerce Platform",
-    description: "Full-stack e-commerce solution",
-    tech: ["React", "Node.js", "MongoDB"],
-    year: 2024,
-    content: `A comprehensive e-commerce platform built with modern technologies...`,
-    repoUrl: "#",
-    liveUrl: "#",
-  };
 
-  if (parseInt(resolvedParams.projectId) !== 1) return notFound();
+    // Fetch featured projects from API
+    const fetchProject = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/projects/${resolvedParams.projectId}`, {
+          cache: 'no-store'
+        });
+        return await res.json();
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+        return {};
+      }
+    };
+    const [projectRes] = await Promise.all([
+   fetchProject()
+    ]);
+  const project = projectRes?.project as Project;
 
+  if(!project?._id) {
+    // return to nextjs 404 page
+    return notFound();
+  }
   return (
     <div className="min-h-screen flex flex-col">
 
@@ -72,6 +94,10 @@ const ProjectDetails = async({ params }: ProjectProps) => {
                   </a>
                 )}
               </div>
+              <p className="text-gray-600 mb-4">{project.description}</p>
+
+          <div className="border-t my-2"></div>
+         
               <p className="text-gray-600 whitespace-pre-line">
                 {project.content}
               </p>
