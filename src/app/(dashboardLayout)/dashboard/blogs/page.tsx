@@ -131,7 +131,7 @@ export default function BlogManagement() {
           </tbody>
       
         </table>
-        {
+            {
         blogs.length === 0 && !isLoading && (
        <EmptyState />
         )

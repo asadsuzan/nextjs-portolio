@@ -10,8 +10,7 @@ import {
   Mail,
   Menu,
   X,
-  Settings,
-  Users,
+
   HomeIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -45,16 +44,7 @@ export default function DashboardLayout({
       href: "/dashboard/messages",
       icon: Mail,
     },
-    {
-      name: "Users",
-      href: "/dashboard/users",
-      icon: Users,
-    },
-    {
-      name: "Settings",
-      href: "/dashboard/settings",
-      icon: Settings,
-    },
+ 
     {
       name: "Back To Portfolio",
       href: "/",
