@@ -51,7 +51,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-gray">
   
       
       <main className="flex-1 py-12 bg-gray-50">

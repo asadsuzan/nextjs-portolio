@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Calendar, Search, Star } from "lucide-react";
+import { AnimatedDiv } from "@/components/shared/AnimatedDiv";
+
 
 interface Blog {
   _id: string;
@@ -15,30 +17,16 @@ interface Blog {
   __v: number;
 }
 const BlogPage =async () => {
-
-  
-  // Fetch recent blog posts from API
-  const fetchBlogs = async () => {
-    try {
-      const res = await fetch(`${process.env.BASE_URL}/api/blogs`, {
-        cache: 'no-store'
-      });
-      return await res.json();
-    } catch (error) {
-      console.error("Failed to fetch posts:", error);
-      return [];
-    }
-  };
  
-  const data = await fetchBlogs();
-  const blogs = data?.blogs as Blog[];
-
+  const data = await fetch(`${process.env.BASE_URL}/api/blogs`,);
+  const {blogs} = await data.json();
 
   return (
-    <div className="my-3">
-   
-  
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="my-3 bg-gradient-to-b from-blue-50 to-gray">
+      <AnimatedDiv initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Blog</h1>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -54,7 +42,7 @@ const BlogPage =async () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {blogs.map((blog:Blog) => (
+            {blogs?.map((blog:Blog) => (
               <article
                 key={blog._id}
                 className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
@@ -88,6 +76,7 @@ const BlogPage =async () => {
             ))}
           </div>
         </div>
+      </AnimatedDiv>
  
     </div>
   );

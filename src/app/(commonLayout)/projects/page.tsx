@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Briefcase, Search, Star } from "lucide-react";
+import { AnimatedDiv } from "@/components/shared/AnimatedDiv";
+
 interface Project {
   _id: string;
   title: string;
@@ -15,27 +17,28 @@ interface Project {
   __v: number;
 }
 
+const ProjectsPage = async () => {
+  const res = await fetch(`${process.env.BASE_URL}/api/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch projects");
+  }
 
-const ProjectsPage = async() => {
-
-  const fetchProjects = async () => {
-    try {
-      const res = await fetch(`${process.env.BASE_URL}/api/projects`, {
-        cache: 'no-store'
-      });
-      return await res.json();
-    } catch (error) {
-      console.error("Failed to fetch projects:", error);
-      return [];
-    }
-  };
-  const data = await fetchProjects();
   const projects = data?.project as Project[];
 
-
- 
   return (
-    <div>
+    <div className="bg-gradient-to-b from-blue-50 to-gray">
+      <AnimatedDiv
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Projects</h1>
@@ -52,7 +55,7 @@ const ProjectsPage = async() => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {projects?.map((project) => (
               <div
                 key={project._id}
                 className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
@@ -62,7 +65,9 @@ const ProjectsPage = async() => {
                   <span className="text-sm text-gray-500">{project.year}</span>
                 </div>
                 <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-                <p className="text-gray-600 mb-4">{project.description?.slice(0,200)}...</p>
+                <p className="text-gray-600 mb-4">
+                  {project.description?.slice(0, 200)}...
+                </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tech.map((tech) => (
                     <span
@@ -84,8 +89,7 @@ const ProjectsPage = async() => {
             ))}
           </div>
         </div>
-    
-
+      </AnimatedDiv>
     </div>
   );
 };

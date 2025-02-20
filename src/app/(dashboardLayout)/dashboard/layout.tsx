@@ -56,7 +56,7 @@ export default function DashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray">
       {/* Mobile Menu Button */}
       <button
         className="md:hidden fixed top-4 right-4 p-2 z-50 bg-white rounded-lg shadow-sm"
