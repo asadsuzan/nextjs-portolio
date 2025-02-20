@@ -29,7 +29,7 @@ export default function ContactPage() {
     
     try {
       // Replace with your actual API endpoint
-      const response = await fetch("/api/message", {
+      const response = await fetch(`/api/message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

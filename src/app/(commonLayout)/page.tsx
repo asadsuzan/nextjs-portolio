@@ -34,7 +34,7 @@ const HomePage =async () => {
   // Fetch featured projects from API
   const fetchFeaturedProjects = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/projects`, {
+      const res = await fetch(`${process.env.BASE_URL}/api/projects`, {
         cache: 'no-store'
       });
       return await res.json();
@@ -47,7 +47,7 @@ const HomePage =async () => {
   // Fetch recent blog posts from API
   const fetchRecentPosts = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/blogs`, {
+      const res = await fetch(`${process.env.BASE_URL}/api/blogs`, {
         cache: 'no-store'
       });
       return await res.json();

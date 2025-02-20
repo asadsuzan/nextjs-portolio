@@ -26,7 +26,7 @@ const ProjectDetails = async({ params }: ProjectProps) => {
     // Fetch featured projects from API
     const fetchProject = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/projects/${resolvedParams.projectId}`, {
+        const res = await fetch(`${process.env.BASE_URL}/api/projects/${resolvedParams.projectId}`, {
           cache: 'no-store'
         });
         return await res.json();

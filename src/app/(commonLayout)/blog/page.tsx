@@ -20,7 +20,7 @@ const BlogPage =async () => {
   // Fetch recent blog posts from API
   const fetchBlogs = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/blogs`, {
+      const res = await fetch(`${process.env.BASE_URL}/api/blogs`, {
         cache: 'no-store'
       });
       return await res.json();
