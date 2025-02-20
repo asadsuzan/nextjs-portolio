@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Portfolio & Blog Website
 
-## Getting Started
+🚀 **Live Website:** [https://next-portfolio-livid-pi.vercel.app/](https://next-portfolio-livid-pi.vercel.app/)
+📂 **GitHub Repository:** [https://github.com/asadsuzan/nextjs-portolio](https://github.com/asadsuzan/nextjs-portolio)
 
-First, run the development server:
+## 📌 Project Overview
+This is a **personal portfolio and blog website** built with **Next.js** and **TypeScript**, featuring dynamic routing, API integration, authentication, state management, and deployment. It serves as both a portfolio to showcase projects and a blog management system with a dashboard for authenticated users.
 
+## 🎯 Features
+### 🌍 **Public Pages (Accessible to All Users)**
+- **Home Page (`/`)**
+  - Personal introduction (name, bio, and profile picture)
+  - Skills showcase (icons/skill bar)
+  - Featured projects
+  - Resume download button
+- **Projects Page (`/projects`)**
+  - List of projects with images, descriptions, and links
+  - Detailed project pages (`/projects/[id]`)
+- **Blog Page (`/blog`)**
+  - Displays a list of blogs (fetched from API/JSON file)
+  - Detailed blog pages (`/blog/[id]`)
+- **Contact Page (`/contact`)**
+  - Simple contact form (name, email, message)
+  - Messages stored in the database
+
+### 🔐 **Dashboard (Only for Logged-in Users)**
+- **Login (`/dashboard`)**
+  - Social login via NextAuth
+- **Blog Management (`/dashboard/blogs`)**
+  - Create, Read, Update, and Delete (CRUD) blog posts
+- **Project Management (`/dashboard/projects`)**
+  - CRUD operations for projects
+  - Upload project images, add links, and descriptions
+- **Message Management (`/dashboard/messages`)**
+  - View messages submitted from the contact form
+
+## ⚙️ **Technical Stack**
+### **Frontend**
+- **Next.js** (App Router)
+- **TypeScript**
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations
+- **Dark Mode Toggle**
+- **SEO Optimized** (SSG, SSR, Metadata)
+
+### **Backend**
+- **MongoDB** as the database
+- **NextAuth.js** for authentication
+- **Next.js API Routes** (`/api/...`)
+
+## 🚀 **Deployment**
+- **Frontend & Backend Deployed on Vercel**
+- **MongoDB Atlas** for database storage
+
+## 🔧 **Installation & Setup**
+### 1️⃣ Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/asadsuzan/nextjs-portolio.git
+cd nextjs-portolio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
+```bash
+npm install  # or yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3️⃣ Set Up Environment Variables
+Create a `.env.local` file and configure the following:
+```env
+MONGODB_URI=""
+GITHUB_SECRET=""
+GITHUB_ID=""
+NEXTAUTH_SECRET=""
+GOOGLE_ID=""
+GOOGLE_SECRET=""
+BASE_URL=
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
+### 4️⃣ Run the Project Locally
+```bash
+npm run dev  # or yarn dev
+```
+Open `http://localhost:3000` in your browser.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠 **Future Improvements**
+- Enhance UI/UX with more animations
+- Implement notifications for dashboard actions
+- Optimize API responses for faster loading
+- Add more social login options
 
-## Deploy on Vercel
+## 🤝 **Contributing**
+Feel free to fork the repo, open issues, or submit pull requests to improve the project.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📜 **License**
+This project is licensed under the **MIT License**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+🚀 **Developed by [Asaduzzaman Suzan](https://github.com/asadsuzan)**
+

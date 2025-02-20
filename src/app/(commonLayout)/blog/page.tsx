@@ -18,8 +18,28 @@ interface Blog {
 }
 const BlogPage =async () => {
  
-  const data = await fetch(`${process.env.BASE_URL}/api/blogs`,);
-  const {blogs} = await data.json();
+  // const data = await fetch(`${process.env.BASE_URL}/api/blogs`,);
+  // if (!data.ok) {
+  //   throw new Error(`HTTP error! status: ${data.status}`);
+  // }
+  // const {blogs} = await data.json();
+let blogs: Blog[] = [];
+  try{
+    const res = await fetch(`${process.env.BASE_URL}/api/blogs`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error("Failed to fetch blogs");
+    }
+     blogs = data?.blogs as Blog[];
+  }catch(error){
+    console.error("Error retrieving blogs:", error);
+  }
 
   return (
     <div className="my-3 bg-gradient-to-b from-blue-50 to-gray">
