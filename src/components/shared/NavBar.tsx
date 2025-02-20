@@ -11,6 +11,8 @@ import {
   DownloadIcon,
   MenuIcon,
   XIcon,
+ 
+  LayoutDashboard,
 } from "lucide-react";
 
 const Navbar = () => {
@@ -22,6 +24,7 @@ const Navbar = () => {
     { name: "Projects", href: "/projects", icon: FolderIcon },
     { name: "Blog", href: "/blog", icon: BookOpenIcon },
     { name: "Contact", href: "/contact", icon: MailIcon },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   ];
 
 //   const dashboardLinks = [

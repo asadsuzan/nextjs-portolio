@@ -1,7 +1,7 @@
 // app/dashboard/layout.tsx
 "use client";
 
-import { useState } from "react";
+import {  useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -12,14 +12,17 @@ import {
   X,
 
   HomeIcon,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
 
@@ -91,7 +94,17 @@ export default function DashboardLayout({
               </Link>
             );
           })}
+           
         </nav>
+       <div className="fixed left-0 bottom-0 w-full flex justify-center p-2">
+       <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            <LogOut className="h-5 w-5" />
+           Sign Out
+          </button>
+       </div>
       </aside>
 
       {/* Main Content */}
