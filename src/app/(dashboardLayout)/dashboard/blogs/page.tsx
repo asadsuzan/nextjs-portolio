@@ -87,7 +87,7 @@ export default function BlogManagement() {
             {blogs?.map((blog) => (
               <tr key={blog._id}>
                 <td className="px-6 py-4 font-medium">{blog.title}</td>
-                <td className="px-6 py-4 font-medium">{blog.excerpt}</td>
+                <td className="px-6 py-4 font-medium truncate max-w-[200px]" title={blog?.excerpt}>{blog.excerpt}</td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-2 py-1 text-sm rounded-full ${
@@ -112,7 +112,7 @@ export default function BlogManagement() {
                   </div>
                 </td>
                 <td className="px-6 py-4">{new Date(blog?.date).toDateString()}</td>
-                <td className="px-6 py-4">{blog.content}</td>
+                <td className="px-6 py-4 truncate max-w-[200px]" title={blog.content}>{blog.content}</td>
   
                 <td className="px-6 py-4 flex gap-3">
                   <button className="text-blue-600 hover:text-blue-700" onClick={()=>router.push(`blogs/${blog._id}`)}>

@@ -62,7 +62,7 @@ const ProjectsPage = async() => {
                   <span className="text-sm text-gray-500">{project.year}</span>
                 </div>
                 <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-                <p className="text-gray-600 mb-4">{project.description}</p>
+                <p className="text-gray-600 mb-4">{project.description?.slice(0,200)}...</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tech.map((tech) => (
                     <span

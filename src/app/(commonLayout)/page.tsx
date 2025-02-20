@@ -139,7 +139,7 @@ const recentPosts:Blog[]= recentPostsRes?.blogs?.slice(0,2) || []
               {featuredProjects.map((project) => (
                 <div key={project._id} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-gray-600 mb-4">{project.description}</p>
+                  <p className="text-gray-600 mb-4">{project?.description.slice(0,200)}...</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((tech) => (
                       <span 
@@ -184,7 +184,7 @@ const recentPosts:Blog[]= recentPostsRes?.blogs?.slice(0,2) || []
                       {new Date(post.date).toLocaleDateString()}
                     </time>
                   </div>
-                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                  <p className="text-gray-600 mb-4">{post?.excerpt?.slice(0,200)}...</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {post.tags.map((tag) => (
                       <span 

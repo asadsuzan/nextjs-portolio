@@ -76,7 +76,7 @@ const BlogPage =async () => {
                   </div>
                 </div>
                 <h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
-                <p className="text-gray-600 mb-4">{blog.excerpt}</p>
+                <p className="text-gray-600 mb-4">{blog.excerpt?.slice(0,200)}...</p>
                 <Link
                   href={`/blog/${blog._id}`}
                   className="text-blue-600 hover:text-blue-700 flex items-center"

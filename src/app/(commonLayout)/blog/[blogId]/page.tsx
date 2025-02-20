@@ -44,7 +44,7 @@ if(!blog?._id) {
   
 
   return (
-    <div>
+    <div className="my-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
@@ -77,6 +77,9 @@ if(!blog?._id) {
               </div>
             </header>
 
+            <div className="prose max-w-none mb-8 border-b pb-5">
+              <p>{blog.excerpt}</p>
+            </div>
             <div className="prose max-w-none mb-8">
               <p>{blog.content}</p>
             </div>
